@@ -1,20 +1,39 @@
 const fs = require("fs");
 
-function solve(puzzle) {
+function transformInputIntoArrayOfWinningNumbersAndMyNumbers(puzzle) {
   const noCardText = /Card \d+:\s+/;
-  let winningNumbers = [];
-  let myNumbers = [];
-
+  let winCards = [];
+  let myCards = [];
   puzzle.split("\n").forEach((row) => {
     let winningNumbersAndMyNumbers = row
       .trim()
       .replace(noCardText, "")
       .split(" | ");
     let [a, b] = winningNumbersAndMyNumbers;
-    winningNumbers.push(a?.split(" ").filter((token) => token != ""));
-    myNumbers.push(b?.split(" ").filter((token) => token != ""));
+    winCards.push(
+      a?.split(" ").filter((token) => token !== "" && token !== undefined)
+    );
+    myCards.push(
+      b?.split(" ").filter((token) => token != "" && token !== undefined)
+    );
   });
-  console.log({ winningNumbers, myNumbers });
+  // console.log({ winCards, myCards });
+  return [winCards, myCards];
+}
+
+function solve(puzzle) {
+  const [winningNumbers, myNumbers] =
+    transformInputIntoArrayOfWinningNumbersAndMyNumbers(puzzle);
+  const winningSet = new Set(...winningNumbers);
+
+  for (let i = 0; i < myNumbers.length; i++) {
+    for (let j = 0; j < myNumbers[i]?.length; j++) {
+      let num = myNumbers[i][j];
+      if (winningSet.has(num)) {
+        console.log("hi mum");
+      }
+    }
+  }
 }
 
 fs.readFile("./mini.txt", "utf8", (err, data) => {
