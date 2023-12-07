@@ -17,30 +17,35 @@ function transformInputIntoArrayOfWinningNumbersAndMyNumbers(puzzle) {
       b?.split(" ").filter((token) => token != "" && token !== undefined)
     );
   });
-  // console.log({ winCards, myCards });
   return [winCards, myCards];
 }
 
 function solve(puzzle) {
   const [winningNumbers, myNumbers] =
     transformInputIntoArrayOfWinningNumbersAndMyNumbers(puzzle);
-  const winningSet = new Set(...winningNumbers);
+  let totalPoints = 0;
 
   for (let i = 0; i < myNumbers.length; i++) {
+    let countOfMyWinningNumbers = 0;
     for (let j = 0; j < myNumbers[i]?.length; j++) {
       let num = myNumbers[i][j];
-      if (winningSet.has(num)) {
-        console.log("hi mum");
+      let setOfWinningNumbers = new Set(winningNumbers[i]);
+      if (setOfWinningNumbers.has(num)) {
+        countOfMyWinningNumbers++;
       }
     }
+    let totalCardPoints = Math.floor(Math.pow(2, countOfMyWinningNumbers - 1));
+
+    totalPoints += totalCardPoints;
   }
+  return totalPoints;
 }
 
-fs.readFile("./mini.txt", "utf8", (err, data) => {
+fs.readFile("./big.txt", "utf8", (err, data) => {
   if (err) {
     console.error(err);
     return;
   }
   const solution = solve(data);
-  console.log(solution); // Output: 4361
+  console.log(solution);
 });
