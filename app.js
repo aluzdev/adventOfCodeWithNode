@@ -1,9 +1,15 @@
 const fs = require("fs");
 
 function solve(puzzle) {
+  const noCardText = /Card \d+:/;
+
   puzzle.split("\n").forEach((element) => {
-    console.log(element.split(" | "));
-    element.split(" | ");
+    let winningNumbersAndMyNumbers = element
+      .replace(noCardText, "")
+      .trim()
+      .split(" | ");
+    let [winningNumbers, myNumbers] = winningNumbersAndMyNumbers;
+    console.log({ winningNumbers, myNumbers });
   });
   return -1;
 }
